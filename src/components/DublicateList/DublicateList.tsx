@@ -4,7 +4,7 @@ import styles from './DublicateList.module.sass';
 import classnames from "classnames";
 import Button from "../Button";
 
-const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setShowLoader, setConnected, vacancyID }) => {
+const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setShowLoader, setConnected, vacancyID, setAdditionDoubleRecord }) => {
     const [open, setOpen] = useState(false);
     const [selectValue, setSelectValue] = useState('');
 
@@ -29,7 +29,7 @@ const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                 candidateUrl = tabs[0].url;
 
                 if (candidateUrl) {
-                    setShowLoader(true)
+                    setShowLoader(true);
 
                     const data = {
                         GUID: vacancyID,
@@ -49,18 +49,15 @@ const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                     })
                         .then(res => {
                             if (res.status === 200) {
-                                setShowError({ show: true, closeText: 'Закрыть', title: 'Отправлено', text: 'Кандидат успешно добавлен' });
                                 setSelectValue('');
+                                setAdditionDoubleRecord({ isDouble: 'Успех', title: 'Успех' });
                             }
                         })
                         .catch(() => {
-                            setShowError({ show: true })
                             setConnected(false);
                             localStorage.setItem("connected", "false")
                         })
                         .finally(() => setShowLoader(false))
-                } else {
-                    setShowError({ show: true });
                 }
             });
 
@@ -68,7 +65,7 @@ const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
     }
 
     return (<div className={styles.wrapper}>
-        <h2 className={styles.title}>Выберите кандидата для объединения</h2>
+        <p className={styles.title}>Выберите кандидата для объединения</p>
         <div>
             <div
                 className={classnames({
@@ -122,8 +119,8 @@ const DublicateList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                 </div>
             </div>
         </div>
-        <Button text='Объединить' callback={() => sendCadidate()} />
+        <Button merge text='Объединить' callback={() => sendCadidate()} />
     </div>);
 }
 
-export default DublicateList
+export default DublicateList;

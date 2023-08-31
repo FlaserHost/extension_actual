@@ -23,14 +23,13 @@ const Error: FC<ErrorProps> = ({
     closeText = 'Повторить'
 }) => {
 
-    const [additionDoubleRecord, setAdditionDoubleRecord] = useState({ isDouble: false, title: title });
-    const additionPanel = () => setAdditionDoubleRecord({ isDouble: true, title: 'Объединение' });
-
+    const [additionDoubleRecord, setAdditionDoubleRecord] = useState({ isDouble: 'Норма', title: title });
+    const additionPanel = () => setAdditionDoubleRecord({ isDouble: 'Объединить', title: 'Объединение' });
     return (
         <div className={styles.wrapper}>
             <div className={styles.content}>
-                <div className={styles.header}>{additionDoubleRecord.title}</div>
-                {!additionDoubleRecord.isDouble ? (<>
+                <h2 className={styles.header}>{additionDoubleRecord.title}</h2>
+                {additionDoubleRecord.isDouble === 'Норма' ? (<>
                     <div className={styles.text}>{text}</div>
                     <div className={styles.buttonWrapper}>
                         {setDouble ? (<>
@@ -38,11 +37,18 @@ const Error: FC<ErrorProps> = ({
                             <Button text='Объединить' callback={additionPanel} />
                         </>) : ''}
                     </div>
-                </>) : (<div className={styles.buttonWrapper}>
-                    <DublicateList vacancies={doubleData.twins} requestParams={requestParams} setShowLoader={setShowLoader} setConnected={setConnected} vacancyID={doubleData.vacancy_id} />
-                </div>)}
+                </>) : additionDoubleRecord.isDouble === 'Объединить' ? (<div className={styles.buttonWrapper}>
+                    <DublicateList
+                        vacancies={doubleData.twins}
+                        requestParams={requestParams}
+                        setShowLoader={setShowLoader}
+                        setConnected={setConnected}
+                        vacancyID={doubleData.vacancy_id}
+                        setAdditionDoubleRecord={setAdditionDoubleRecord}
+                    />
+                </div>) : (<div className={styles.text}>Кандидат успешно объединен</div>)}
                 <div className={styles.buttonWrapper}>
-                    <Button text={closeText} callback={close} />
+                    <Button text={additionDoubleRecord.isDouble !== 'Успех' ? closeText : 'Закрыть'} callback={close} />
                 </div>
             </div>
         </div>
