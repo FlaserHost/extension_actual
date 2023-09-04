@@ -61,6 +61,7 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
                         body: JSON.stringify(data)
                     })
                         .then(res => {
+                            console.log(res);
                             if (res.status === 200) {
                                 setShowError({ show: true, closeText: 'Закрыть', title: 'Отправлено', text: 'Кандидат успешно добавлен' })
                                 setComment('')
@@ -84,25 +85,32 @@ const VacanciesList: FC<VacanciesListProps> = ({ vacancies, requestParams, setSh
 
                             } else if (res.status === 201) {
                                 // дубль
-                                res.json().then(item => {
+                                res.text().then(item => {
+                                    let parsedData;
+
+                                    try {
+                                        parsedData = JSON.parse(item);
+                                    } catch (err) {
+                                        parsedData = item;
+                                    }
+
                                     setShowError({
                                         show: true,
                                         double: true,
                                         closeText: 'Отменить',
                                         title: 'Кандидат найден в базе',
-                                        text: item.error_text ?? '',
-                                        doubleData: item,
+                                        text: parsedData.error_text ?? parsedData,
+                                        doubleData: parsedData,
                                         requestParams: path,
                                         setConnected: setConnected,
                                         setShowLoader: setShowLoader
                                     })
-                                })
-
+                                });
                             } else {
                                 setShowError({ show: true })
                             }
                         })
-                        .catch(er => {
+                        .catch(() => {
                             setShowError({ show: true })
                             setConnected(false);
                             localStorage.setItem("connected", "false")

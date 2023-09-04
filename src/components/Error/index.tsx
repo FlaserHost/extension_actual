@@ -23,7 +23,7 @@ const Error: FC<ErrorProps> = ({
     closeText = 'Повторить'
 }) => {
 
-    const version = doubleData.version !== undefined;
+    const version = typeof doubleData === 'object';
 
     const [additionDoubleRecord, setAdditionDoubleRecord] = useState({ isDouble: 'Норма', title: title });
     const additionPanel = () => setAdditionDoubleRecord({ isDouble: 'Объединить', title: 'Объединение' });
