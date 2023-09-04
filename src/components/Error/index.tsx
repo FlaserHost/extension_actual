@@ -23,6 +23,8 @@ const Error: FC<ErrorProps> = ({
     closeText = 'Повторить'
 }) => {
 
+    const version = doubleData.version !== undefined;
+
     const [additionDoubleRecord, setAdditionDoubleRecord] = useState({ isDouble: 'Норма', title: title });
     const additionPanel = () => setAdditionDoubleRecord({ isDouble: 'Объединить', title: 'Объединение' });
     return (
@@ -34,7 +36,7 @@ const Error: FC<ErrorProps> = ({
                     <div className={styles.buttonWrapper}>
                         {setDouble ? (<>
                             <Button text='Все равно добавить' callback={setDouble} />
-                            <Button text='Объединить' callback={additionPanel} />
+                            {version ? <Button text='Объединить' callback={additionPanel} /> : ''}
                         </>) : ''}
                     </div>
                 </>) : additionDoubleRecord.isDouble === 'Объединить' ? (<div className={styles.buttonWrapper}>
